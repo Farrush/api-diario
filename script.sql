@@ -15,7 +15,7 @@ create table usuario_tb(
 );
 create table paragrafo_tb(
 	id_paragrafo int auto_increment primary key,
-    co_conteudo varchar(200),
+    co_conteudo varchar(2000),
     id_diario int not null,
-    foreign key (id_diario) references diario_tb(id_diario)
+    foreign key (id_diario) references diario_tb(id_diario) on delete cascade
 );

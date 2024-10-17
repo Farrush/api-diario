@@ -12,9 +12,9 @@ export async function sUsuario(id){
     return await con.query(sql, [id])
 }
 export async function iUsuario(usuario){
-    const sql = "insert into usuario_tb (nm_nome, em_email, pw_senha) values (?, ?, sha2(?, 256))"
+    const sql = "insert into usuario_tb (nm_nome, em_email, pw_senha, id_diario) values (?, ?, sha2(?, 256), ?)"
 
-    return await con.query(sql, [usuario.nome, usuario.email, usuario.senha])
+    return await con.query(sql, [usuario.nome, usuario.email, usuario.senha, usuario.diario])
 }
 export async function uUsuario(usuario, id){
     usuario = {...usuario, id}

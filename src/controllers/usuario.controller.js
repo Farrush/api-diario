@@ -1,24 +1,44 @@
 import { Router } from "express";
+import { criarDiarioParaNovoUsuario, deletaDiarioDepoisDeDeletarUsuario } from "../services/diario.service.js";
 import { buscaUsuario, buscaUsuarios, adicionaUsuario, alteraUsuario, deletaUsuario, loginUsuario } from "../services/usuario.service.js";
 import { autenticar, geraToken } from "../utils/jwt.js";
+import valUsuario from "../validations/usuario/usuario.validator.js";
 const endpoints = Router()
 
 endpoints.get('/usuario', async (req, res) => {
-    res.send(await buscaUsuarios())
+    try{
+        res.send(await buscaUsuarios())
+
+    }catch(err){
+        res.status(400).send({erro: err.message})
+    }
 })
 endpoints.get('/usuario/:id', async (req, res) =>{
-    res.send(await buscaUsuario(req))
+    try{
+        res.send(await buscaUsuario(req))
+    }catch(err){
+        res.status(400).send({erro: err.message})
+    }
 })
 endpoints.post('/usuario', async (req, res) => {
-    let novoId = await adicionaUsuario(req)
-    res.send({idNovoUsuario: novoId})
+    try{
+        valUsuario(req.body)
+        let usuario = req.body
+        let novoDiario = await criarDiarioParaNovoUsuario(usuario)
+        usuario = {...usuario, diario: novoDiario}
+        let novoId = await adicionaUsuario(usuario)
+        res.send({idNovoUsuario: novoId})
+
+    }catch(err){
+        res.status(400).send({erro: err.message})
+    }
 })
 endpoints.put('/usuario/:id', autenticar, async (req, res) => {
     try{
         let resp = await alteraUsuario(req)
         res.send({alterado: resp})
     }catch(err){
-        res.status(401).send({erro: err.message})
+        res.status(400).send({erro: err.message})
     }
 })
 endpoints.delete('/usuario/:id', autenticar, async (req, res) => {
@@ -28,8 +48,8 @@ endpoints.delete('/usuario/:id', autenticar, async (req, res) => {
             throw new Error("Usuário não existe")
 
         await deletaUsuario(req)
-        if(usuario.diario !== null){
-            //Apagar o diário
+        if(usuario.diario != undefined || usuario.diario != null){
+            await deletaDiarioDepoisDeDeletarUsuario(usuario.diario)
         }
         res.send({excluido: usuario})
     }catch(err){

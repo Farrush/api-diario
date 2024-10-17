@@ -36,6 +36,10 @@ export async function deletaUsuario(req){
 }
 
 export async function loginUsuario(req){
+    if(req.body.email == undefined)
+        throw new Error("Email não inserido")
+    if(req.body.senha == undefined)
+        throw new Error("Senha não inserida")
     let email = req.body.email
     let senha = req.body.senha
     const [usuario] = await login(email, senha)

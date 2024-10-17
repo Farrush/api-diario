@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken'
 const KEY = "=SearchAndDestr0y?"
+
 export function geraToken(usuario){
-    return jwt.sign(usuario, KEY)
+  if(usuario == undefined)
+    throw new Error("Dados não inseridos")
+  return jwt.sign(usuario, KEY)
 }
 
 export function autenticar(req, res, next){

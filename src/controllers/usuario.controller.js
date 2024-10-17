@@ -60,6 +60,8 @@ endpoints.delete('/usuario/:id', autenticar, async (req, res) => {
 endpoints.post('/usuario/login', async (req, res)=>{
     try{
         const [usuario] = await loginUsuario(req)
+        if(usuario == undefined)
+            throw new Error("Email ou senha incorretos")
         const token = geraToken(usuario)
         res.send({token})
     } catch (err) {

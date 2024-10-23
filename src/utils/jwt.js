@@ -25,6 +25,6 @@ export function autenticacao(req, res, next) {
       next();
   
     } catch (e) {
-      res.status(401).end();
+      res.status(401).send({erro: "Falha na autenticação"}).end();
     }
   }

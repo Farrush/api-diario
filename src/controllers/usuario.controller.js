@@ -63,7 +63,7 @@ endpoints.post('/usuario/login', async (req, res)=>{
         if(usuario == undefined)
             throw new Error("Email ou senha incorretos")
         const token = geraToken(usuario)
-        res.send({token})
+        res.send({usuario, token})
     } catch (err) {
         res.status(401).send({ erro: err.message });
     }

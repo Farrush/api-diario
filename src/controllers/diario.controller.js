@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { autenticar } from "../utils/jwt.js";
-import { adicionaDiario, alteraDiario, buscaDiario, buscaDiarios, buscaDiariosPorUsuario, deletaDiario } from "../services/diario.service.js";
+import { adicionaDiario, alteraDiario, buscaDiario, buscaDiarios, buscaDiarioPorUsuario, deletaDiario } from "../services/diario.service.js";
 const endpoints = Router()
 
 endpoints.get('/diario', autenticar, async (req, res) =>{
@@ -20,7 +20,7 @@ endpoints.get('/diario/:id', autenticar, async (req, res) =>{
 })
 endpoints.get('/diario/usuario/:id', autenticar, async (req, res) =>{
     try{
-        res.send(await buscaDiariosPorUsuario(req))
+        res.send(await buscaDiarioPorUsuario(req))
     }catch(err){
         res.status(400).send({erro: err.message})
     }

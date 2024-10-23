@@ -12,11 +12,11 @@ export async function buscaDiario(req){
     let [diario] = await sDiario(id)
     return diario[0]
 }
-export async function buscaDiariosPorUsuario(req){
+export async function buscaDiarioPorUsuario(req){
     valId(req.params.id)
     let id = req.params.id
-    let [diarios] = await sDiariosPorUsuario(id)
-    return diarios
+    let [diario] = await sDiariosPorUsuario(id)
+    return diario[0]
 }
 export async function adicionaDiario(req){
     valDiario(req.body)
